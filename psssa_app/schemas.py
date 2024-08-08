@@ -7,7 +7,7 @@ class Category(BaseModel):
     name: str
     
     class Config:
-        orm_mode = True
+        from_attributes = True
         
 
 class Region(BaseModel):
@@ -15,14 +15,14 @@ class Region(BaseModel):
     name: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class RegionCreate(BaseModel):
     name: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         
 
 class City(BaseModel):
@@ -30,7 +30,7 @@ class City(BaseModel):
     name: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class CityCreate(BaseModel):
@@ -38,7 +38,7 @@ class CityCreate(BaseModel):
     name: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class Status(BaseModel):
@@ -46,7 +46,7 @@ class Status(BaseModel):
     name: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class AccountType(BaseModel):
@@ -54,7 +54,7 @@ class AccountType(BaseModel):
     name: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class Record(BaseModel):
@@ -66,7 +66,7 @@ class Record(BaseModel):
     pension_number: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class RecordCreate(BaseModel):
@@ -77,7 +77,7 @@ class RecordCreate(BaseModel):
     pension_number: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         
 
 class User(BaseModel):
@@ -89,7 +89,7 @@ class User(BaseModel):
     password: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class UserCreate(BaseModel):
@@ -100,17 +100,17 @@ class UserCreate(BaseModel):
     password: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
-class UserReturn(BaseModel):
+class UserResponse(BaseModel):
     account_type_id: int
     region_id: int
     city_id: int
     name: str
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class Token(BaseModel):

@@ -46,6 +46,7 @@ class Record(Base):
     region_id = Column(Integer, nullable=False)
     category_id = Column(Integer, nullable=False)
     city_id = Column(Integer, nullable=False)
+    created_city_id = Column(Integer, nullable=False)
     name = Column(String(150), nullable=False)
     pension_number = Column(String(255), nullable=False)
 

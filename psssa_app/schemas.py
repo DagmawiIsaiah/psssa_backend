@@ -26,6 +26,7 @@ class RegionCreate(BaseModel):
         
 
 class City(BaseModel):
+    id: int
     region_id: int
     name: str
 
@@ -62,6 +63,7 @@ class Record(BaseModel):
     region_id: int
     category_id: int
     city_id: int
+    created_city_id: int
     name: str
     pension_number: str
 
@@ -73,6 +75,7 @@ class RecordCreate(BaseModel):
     region_id: int
     category_id: int
     city_id: int
+    created_city_id: int
     name: str
     pension_number: str
 
@@ -104,6 +107,7 @@ class UserCreate(BaseModel):
 
 
 class UserResponse(BaseModel):
+    id: int
     account_type_id: int
     region_id: int
     city_id: int

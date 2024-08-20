@@ -35,7 +35,7 @@ def get_record_by_id(id: int, db: Session = Depends(get_db), user: models.User =
 
 
 @router.put("/id")
-def update_record(id: int, record: schemas.Record, db: Session = Depends(get_db), user: models.User = Depends(oauth2.get_current_user)):
+def update_record(id: int, record: schemas.RecordCreate, db: Session = Depends(get_db), user: models.User = Depends(oauth2.get_current_user)):
     db_record = db.query(models.RecordCreate).filter(or_(
         models.Record.city_id == user.city_id, models.Record.created_city_id == user.city_id)).first()
     if not db_record:

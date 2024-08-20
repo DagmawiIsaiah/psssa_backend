@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta, timezone
 
 from . import models
-from .database import get_db
+from .database import SessionLocal, get_db
 
 oauth2scheme = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -18,12 +18,9 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 10
 
 
-def get_user_by_id(id: int, db: Session = Depends(get_db)):
-    try:
-        response = db.query(models.User).filter(models.User.id == id).first()
-    except:
-        raise HTTPException(status_code=404, detail="User not found")
-    return response
+def get_user_by_id(id, db: Session):
+    user = db.query(models.User).filter(models.User.id == id).first()
+    return user
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
@@ -41,16 +38,15 @@ def verify_access_token(token: str, credentials_exception):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         id = int(payload.get("user_id"))
-        print(id)
         if id is None:
             raise credentials_exception
         
-        user = get_user_by_id(id)
-        if user is None:
-            raise credentials_exception
-        
-        # token_data = schemas.TokenData(id=id)
-        # return token_data
+        with SessionLocal() as db:
+            user = get_user_by_id(id, db)
+            
+            if user is None:
+                raise credentials_exception
+            
         return user
     except JWTError:
         raise credentials_exception

@@ -16,7 +16,7 @@ def create_city(city: schemas.CityCreate, db: Session = Depends(get_db)):
     return new_city
 
 
-@router.get("/", response_model=schemas.City)
+@router.get("/", response_model=list[schemas.City])
 def get_all_city(db: Session = Depends(get_db)):
     cities = db.query(models.City).all()
     return cities

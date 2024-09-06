@@ -16,7 +16,7 @@ def create_region(region: schemas.RegionCreate, db: Session = Depends(get_db)):
     return new_region
 
 
-@router.get("/", response_model=schemas.Region)
+@router.get("/", response_model=list[schemas.Region])
 def get_all_region(db: Session = Depends(get_db)):
     regions = db.query(models.Region).all()
     return regions

@@ -42,13 +42,13 @@ def update_user(id: int, user: schemas.UserCreate, db: Session = Depends(get_db)
     db.refresh(db_user)
     return db_user
 
+
 @router.delete("/{id}")
 def delete_user(id: int, db: Session = Depends(get_db)):
     db_user = db.query(models.User).filter(models.User.id == id).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="Item not found")
-    db.delete(db_user, synchronize_session=False)
+    db.delete(db_user, synchronize_session=True)
     db.commit()
     db.refresh(db_user)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-

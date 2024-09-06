@@ -42,22 +42,6 @@ class CityCreate(BaseModel):
         from_attributes = True
 
 
-class Status(BaseModel):
-    id: int
-    name: str
-
-    class Config:
-        from_attributes = True
-
-
-class AccountType(BaseModel):
-    id: int
-    name: str
-
-    class Config:
-        from_attributes = True
-
-
 class Record(BaseModel):
     id: int
     region_id: int

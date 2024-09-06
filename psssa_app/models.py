@@ -25,20 +25,6 @@ class City(Base):
     name = Column(String(150), nullable=False)
 
 
-class Status(Base):
-    __tablename__ = "statuses"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
-    name = Column(String(150), nullable=False) # Pending, Accepted
-
-
-class AccountType(Base):
-    __tablename__ = "account_types"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
-    name = Column(String(20), nullable=False) # Admin, User
-
-
 class Record(Base):
     __tablename__ = "records"
 
@@ -60,4 +46,3 @@ class User(Base):
     city_id = Column(Integer, nullable=False)
     name = Column(String(150), nullable=False)
     password = Column(String(255), nullable=False)
-    

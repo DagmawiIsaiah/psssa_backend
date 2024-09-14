@@ -30,7 +30,7 @@ def get_record_by_id(
     user: models.User = Depends(oauth2.get_current_user),
 ):
     query = db.query(models.Record)
-    
+
     if category_id is not None:
         query = query.filter(models.Record.category_id == category_id)
     if region_id is not None:
@@ -42,7 +42,12 @@ def get_record_by_id(
     if pention_number is not None:
         query = query.filter(models.Record.pention_number == pention_number)
 
-    records = query.count(15)
+    records = query.filter(
+        or_(
+            models.Record.city_id == user.city_id,
+            models.Record.created_city_id == user.city_id,
+        )
+    ).all()
 
     if not records:
         raise HTTPException(status_code=404, detail="No records found")

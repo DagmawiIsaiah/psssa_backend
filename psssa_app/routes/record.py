@@ -19,32 +19,54 @@ def create_record(record: schemas.RecordCreate, db: Session = Depends(get_db)):
     return new_record
 
 
-@router.get("/", response_model=list[schemas.Record])
-def get_all_records(db: Session = Depends(get_db),
-                    user: models.User = Depends(oauth2.get_current_user)):
-    if user.account_type_id == 1:
-        return db.query(models.Record).all()
-    else:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+@router.get("/", response_model=schemas.Record)
+def get_record_by_id(
+    category_id: int | None = None,
+    region_id: int | None = None,
+    city_id: int | None = None,
+    status_id: int | None = None,
+    pention_number: str | None = None,
+    db: Session = Depends(get_db),
+    user: models.User = Depends(oauth2.get_current_user),
+):
+    query = db.query(models.Record)
+    
+    if category_id is not None:
+        query = query.filter(models.Record.category_id == category_id)
+    if region_id is not None:
+        query = query.filter(models.Record.region_id == region_id)
+    if city_id is not None:
+        query = query.filter(models.Record.city_id == city_id)
+    if status_id is not None:
+        query = query.filter(models.Record.status_id == status_id)
+    if pention_number is not None:
+        query = query.filter(models.Record.pention_number == pention_number)
 
+    records = query.count(15)
 
-@router.get("/{id}", response_model=schemas.Record)
-def get_record_by_id(id: int, db: Session = Depends(get_db),
-                     user: models.User = Depends(oauth2.get_current_user)):
-    record = db.query(models.Record).filter(
-        models.Record.id == id, or_(models.Record.created_city_id ==
-                                    user.city_id, models.Record.city_id ==
-                                    user.city_id)).first()
-    return record
+    if not records:
+        raise HTTPException(status_code=404, detail="No records found")
+
+    return records
 
 
 @router.put("/id")
-def update_record(id: int, record: schemas.RecordCreate, db: Session =
-                  Depends(get_db), user: models.User =
-                  Depends(oauth2.get_current_user)):
-    db_record = db.query(models.RecordCreate).filter(or_(
-        models.Record.city_id == user.city_id, models.Record.created_city_id ==
-        user.city_id)).first()
+def update_record(
+    id: int,
+    record: schemas.RecordCreate,
+    db: Session = Depends(get_db),
+    user: models.User = Depends(oauth2.get_current_user),
+):
+    db_record = (
+        db.query(models.RecordCreate)
+        .filter(
+            or_(
+                models.Record.city_id == user.city_id,
+                models.Record.created_city_id == user.city_id,
+            )
+        )
+        .first()
+    )
     if not db_record:
         raise HTTPException(status_code=404, detail="Item not found")
     db_record = models.Record(**record.model_dump())

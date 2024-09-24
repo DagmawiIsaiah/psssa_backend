@@ -7,7 +7,7 @@ dev_db = {
     "password": "yZX3uGCINgW0",
     "host": "ep-dark-term-a5g4i01f.us-east-2.aws.neon.tech",
     "database": "psssadb",
-    "port": "5432"
+    "port": "5432",
 }
 
 SQLALCHEMY_DATABASE_URL = f"postgresql://{dev_db['user']}:{dev_db['password']}@{dev_db['host']}:{dev_db['port']}/{dev_db['database']}"

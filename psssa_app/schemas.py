@@ -48,6 +48,7 @@ class Record(BaseModel):
     category_id: int
     city_id: int
     created_city_id: int
+    status_id: int
     name: str
     pension_number: str
 

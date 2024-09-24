@@ -19,8 +19,8 @@ def create_record(record: schemas.RecordCreate, db: Session = Depends(get_db)):
     return new_record
 
 
-@router.get("/", response_model=schemas.Record)
-def get_record_by_id(
+@router.get("/", response_model=list[schemas.Record])
+def get_record(
     category_id: int | None = None,
     region_id: int | None = None,
     city_id: int | None = None,

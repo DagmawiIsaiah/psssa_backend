@@ -7,7 +7,7 @@ class Record(Base):
     __tablename__ = "records"
 
     id = Column(
-        Integer, primary_key=True, index=True, autoincrement=True, 
+        Integer, primary_key=True, index=True, autoincrement=True,
         nullable=False
     )
     region_id = Column(Integer, nullable=False)
@@ -23,7 +23,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(
-        Integer, primary_key=True, nullable=False, index=True, 
+        Integer, primary_key=True, nullable=False, index=True,
         autoincrement=True
     )
     account_type_id = Column(Integer, nullable=False)

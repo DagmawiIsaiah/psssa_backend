@@ -26,7 +26,7 @@ class RecordCreate(BaseModel):
 
     class Config:
         from_attributes = True
-        
+
 
 class User(BaseModel):
     id: int
@@ -57,7 +57,7 @@ class UserResponse(BaseModel):
     region_id: int
     city_id: int
     name: str
-    
+
     class Config:
         from_attributes = True
 

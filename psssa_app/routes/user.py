@@ -32,7 +32,8 @@ def get_user_by_id(id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/id")
-def update_user(id: int, user: schemas.UserCreate, db: Session = Depends(get_db)):
+def update_user(id: int, user: schemas.UserCreate,
+                db: Session = Depends(get_db)):
     db_user = db.query(models.User).filter(models.User.id == id).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="Item not found")

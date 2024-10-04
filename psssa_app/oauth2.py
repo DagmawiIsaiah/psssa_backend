@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta, timezone
 
 from . import models
-from .database import SessionLocal, get_db
+from .database import SessionLocal
 
 oauth2scheme = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -53,6 +53,10 @@ def verify_access_token(token: str, credentials_exception):
     
 
 def get_current_user(token: str = Depends(oauth2scheme)):
-    creadential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials", headers={"WWW-Authenticate": "Bearer"})
+    creadential_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"})
 
-    return verify_access_token(token=token, credentials_exception=creadential_exception)
+    return verify_access_token(token=token,
+                               credentials_exception=creadential_exception)

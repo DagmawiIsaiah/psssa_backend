@@ -2,46 +2,6 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class Category(BaseModel):
-    id: int
-    name: str
-    
-    class Config:
-        from_attributes = True
-        
-
-class Region(BaseModel):
-    id: int
-    name: str
-
-    class Config:
-        from_attributes = True
-
-
-class RegionCreate(BaseModel):
-    name: str
-
-    class Config:
-        from_attributes = True
-        
-
-class City(BaseModel):
-    id: int
-    region_id: int
-    name: str
-
-    class Config:
-        from_attributes = True
-
-
-class CityCreate(BaseModel):
-    region_id: int
-    name: str
-
-    class Config:
-        from_attributes = True
-
-
 class Record(BaseModel):
     id: int
     region_id: int

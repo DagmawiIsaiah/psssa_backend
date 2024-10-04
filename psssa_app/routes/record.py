@@ -13,6 +13,7 @@ router = APIRouter(prefix="/record", tags=["Record"])
 @router.post("/create", response_model=schemas.Record)
 def create_record(record: schemas.RecordCreate, db: Session = Depends(get_db)):
     new_record = models.Record(**record.model_dump())
+    new_record.status_id = 1
     db.add(new_record)
     db.commit()
     db.refresh(new_record)

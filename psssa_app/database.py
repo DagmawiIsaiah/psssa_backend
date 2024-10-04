@@ -3,10 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 dev_db = {
-    "user": "psssadb_owner",
-    "password": "yZX3uGCINgW0",
-    "host": "ep-dark-term-a5g4i01f.us-east-2.aws.neon.tech",
-    "database": "psssadb",
+    "user": "postgres",
+    "password": "newbies",
+    "host": "localhost",
+    "database": "Tesfa",
     "port": "5432",
 }
 

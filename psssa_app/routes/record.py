@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, APIRouter
+from fastapi import Body, Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 
@@ -20,35 +20,21 @@ def create_record(record: schemas.RecordCreate, db: Session = Depends(get_db)):
     return new_record
 
 
-@router.get("/", response_model=list[schemas.Record])
+@router.get("/{pension_number}", response_model=schemas.Record)
 def get_record(
-    category_id: int | None = None,
-    region_id: int | None = None,
-    city_id: int | None = None,
-    status_id: int | None = None,
-    pention_number: str | None = None,
+    pension_number: str = None,
     db: Session = Depends(get_db),
     user: models.User = Depends(oauth2.get_current_user),
 ):
-    query = db.query(models.Record)
-
-    if category_id is not None:
-        query = query.filter(models.Record.category_id == category_id)
-    if region_id is not None:
-        query = query.filter(models.Record.region_id == region_id)
-    if city_id is not None:
-        query = query.filter(models.Record.city_id == city_id)
-    if status_id is not None:
-        query = query.filter(models.Record.status_id == status_id)
-    if pention_number is not None:
-        query = query.filter(models.Record.pention_number == pention_number)
+    query = db.query(models.Record).filter(models.Record.pension_number
+                                           == pension_number)
 
     records = query.filter(
         or_(
             models.Record.city_id == user.city_id,
             models.Record.created_city_id == user.city_id,
         )
-    ).all()
+    ).first()
 
     if not records:
         raise HTTPException(status_code=404, detail="No records found")
@@ -56,26 +42,27 @@ def get_record(
     return records
 
 
-@router.put("/id")
+@router.put("/update/")
 def update_record(
-    id: int,
-    record: schemas.RecordCreate,
+    id: int = Body(...),
+    new_status: int = Body(...),
     db: Session = Depends(get_db),
     user: models.User = Depends(oauth2.get_current_user),
 ):
-    db_record = (
-        db.query(models.RecordCreate)
-        .filter(
-            or_(
-                models.Record.city_id == user.city_id,
-                models.Record.created_city_id == user.city_id,
-            )
+
+    query = db.query(models.Record).filter(models.Record.id
+                                           == id)
+
+    db_record = query.filter(
+        or_(
+            models.Record.city_id == user.city_id,
+            models.Record.created_city_id == user.city_id,
         )
-        .first()
-    )
+    ).first()
+    
     if not db_record:
         raise HTTPException(status_code=404, detail="Item not found")
-    db_record = models.Record(**record.model_dump())
+    db_record.status_id = new_status
     db.commit()
     db.refresh(db_record)
     return db_record

@@ -1,9 +1,10 @@
-from fastapi import Depends, HTTPException, Response, status, APIRouter
+from fastapi import Body, Depends, HTTPException, Response, status, APIRouter
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
 from ..database import get_db
 from .. import utils
+from psssa_app import oauth2
 
 router = APIRouter(prefix="/user", tags=["User"])
 
@@ -20,9 +21,9 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=list[schemas.UserResponse])
-def get_all_users(db: Session = Depends(get_db)):
-    users = db.query(models.User).all()
-    return users
+def get_users(db: Session = Depends(get_db)):
+    user = db.query(models.User).all()
+    return user
 
 
 @router.get("/{id}", response_model=schemas.UserResponse)
@@ -31,16 +32,22 @@ def get_user_by_id(id: int, db: Session = Depends(get_db)):
     return user
 
 
-@router.put("/id")
-def update_user(id: int, user: schemas.UserCreate,
-                db: Session = Depends(get_db)):
-    db_user = db.query(models.User).filter(models.User.id == id).first()
+@router.put("/update_password", response_model=schemas.UserResponse)
+def update_password(
+    user_id: int = Body(...),
+    new_password: str = Body(...),
+    db: Session = Depends(get_db),
+    user: models.User = Depends(oauth2.get_current_user),
+):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+
     if not db_user:
-        raise HTTPException(status_code=404, detail="Item not found")
-    db_user = models.User(**user.model_dump())
-    db_user.password = utils.hash(user.password)
+        raise HTTPException(status_code=404, detail="User not found")
+
+    db_user.password = utils.hash(new_password)
     db.commit()
     db.refresh(db_user)
+
     return db_user
 
 
